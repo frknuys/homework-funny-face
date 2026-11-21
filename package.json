@@ -1,0 +1,26 @@
+{
+  "name": "bun-react-template",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot src/index.ts",
+    "build": "bun build ./src/camera.html ./src/showroom.html ./src/admin.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+    "start": "NODE_ENV=production bun src/index.ts"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.2.3",
+    "qrcode": "^1.5.4",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  },
+  "peerDependencies": {
+    "typescript": "^6"
+  }
+}
