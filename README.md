@@ -21,7 +21,9 @@ bun dev
 
 Sunucu `http://localhost:3000` adresinde açılır.
 
-Telefonun kamerası sadece HTTPS'te çalışır. Bu yüzden telefonlar bir tünel (örneğin Cloudflare Tunnel ya da ngrok) üzerinden bağlanır. QR kodda tünel adresinin görünmesi için iki yol var:
+Telefonun kamerası sadece HTTPS'te çalışır. Bu yüzden telefonlar bir tünel (örneğin Cloudflare Tunnel ya da ngrok) üzerinden bağlanır.
+
+`bun dev` çalışırken tüneli `http://localhost:3001` adresine yönlendir (3000 değil). Bun'ın dev modu, localhost dışından gelen sayfa isteklerini "Host header does not match the dev server" hatasıyla engeller; 3001 aynı uygulamayı dev modu kapalı olarak sunar. `bun start` ile çalışırken tek port (3000) yeterli. QR kodda tünel adresinin görünmesi için iki yol var:
 
 - Showroom'u tünel adresinden aç.
 - Ya da sunucuyu tünel adresiyle başlat:

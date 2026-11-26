@@ -9,6 +9,10 @@ type WsData = { role: Role };
 
 const WASM_DIR = new URL("../node_modules/@mediapipe/tasks-vision/wasm/", import.meta.url);
 const PORT = Number(process.env.PORT ?? 3000);
+// Bun'ın dev modu, Host başlığı localhost olmayan sayfa isteklerini engeller ("Host header does not match the dev server").
+// Bu yüzden geliştirmede tünel, dev modu kapalı bu ikinci porta bağlanır (HMR yok, gerisi aynı).
+const TUNNEL_PORT = Number(process.env.TUNNEL_PORT ?? PORT + 1);
+const IS_DEV = process.env.NODE_ENV !== "production";
 // Telefonlar tünel üzerinden bağlanır (kamera için HTTPS şart; HTTPS'i tünel sağlar).
 // PUBLIC_URL verilirse QR koddaki adres odur; verilmezse showroom'un açıldığı adres kullanılır.
 const PUBLIC_URL = process.env.PUBLIC_URL?.replace(/\/+$/, "");
@@ -180,14 +184,10 @@ const config = {
       }
     },
   },
-
-  development: process.env.NODE_ENV !== "production" && {
-    hmr: true,
-    console: true,
-  },
 };
 
-servers.push(serve({ ...config, port: PORT }));
+servers.push(serve({ ...config, id: "main", port: PORT, development: IS_DEV && { hmr: true, console: true } }));
+if (IS_DEV) servers.push(serve({ ...config, id: "tunnel", port: TUNNEL_PORT, development: false }));
 
 console.log(`💾 Fotoğraflar: ${PHOTO_DIR}`);
 console.log(`🖼  Showroom:    http://localhost:${PORT}/showroom`);
@@ -197,3 +197,4 @@ console.log(
     ? `📱 Kamera:      ${PUBLIC_URL}/camera`
     : `📱 Kamera:      <tünel adresi>/camera  (QR kodda doğru adres için: PUBLIC_URL=<tünel adresi> bun dev)`,
 );
+if (IS_DEV) console.log(`🚇 Tünel:       tüneli http://localhost:${TUNNEL_PORT} adresine yönlendir`);
